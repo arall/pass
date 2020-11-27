@@ -7,20 +7,22 @@ var base32 = require('base32');
     const sodium = _sodium;
 
     // Generate a random secret key
-    let rand = sodium.randombytes_buf(32);
-    let secretkey = base32.encode(rand).toUpperCase().replace(/=/g, '');
-    console.log('Secret key: ' + secretkey);
+    let secretkey = sodium.randombytes_buf(32);
+    // let secretkey = base32.encode(rand).toUpperCase().replace(/=/g, '');
+    let secretkeyEncoded = Buffer.from(secretkey).toString('base64');
+    console.log('Secret key: ' + secretkeyEncoded);
 
     // Generate key pair using the secret key as passphrase
     let keypair = sodium.crypto_box_keypair();
-    console.log(keypair.publicKey.toString());
+    console.log('Private key: ' + Buffer.from(keypair.publicKey).toString('base64'));
 
     // Encrypt the private key (with key derivation)
     let context = 'private key encryption';
-    let key = sodium.crypto_kdf_derive_from_key(128, 1, context, secretkey);
-    let nonce = sodium.crypto_kdf_derive_from_key(24, 2, context, secretkey);
-    let encrypted = sodium.crypto_secretbox_easy('This is a test string', nonce, key);
-    console.log(encrypted.toString());
+    let subKey = sodium.crypto_kdf_derive_from_key(32, 1, context, secretkey);
+    // console.log('Derivation key: '  + subKey.toString());
+    let nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(24, 2, context, secretkey));
+    let encryptedPrivateKey = sodium.crypto_secretbox_easy(keypair.privateKey, nonce, subKey);
+    console.log('Encrypted private key: '+ Buffer.from(encryptedPrivateKey).toString('base64'));
 
     // Send the encrypted private key to the server
 

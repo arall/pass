@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1cc9642e-ded4-4b2c-a476-829b574c11a3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.php_cs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.php_cs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/keypair/generate.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/keypair/generate.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/test.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +164,8 @@
       <option name="presentableId" value="Default" />
       <updated>1606395710783</updated>
       <workItem from="1606395712227" duration="9327000" />
-      <workItem from="1606465985616" duration="5195000" />
+      <workItem from="1606465985616" duration="5410000" />
+      <workItem from="1606478175413" duration="1354000" />
     </task>
     <servers />
   </component>
