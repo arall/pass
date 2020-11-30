@@ -1,10 +1,12 @@
 // NodeJS client for testing purposes
 const _sodium = require('libsodium-wrappers');
-var base32 = require('base32');
 
 (async() => {
     await _sodium.ready;
     const sodium = _sodium;
+
+    const KEY_BYTES = sodium.crypto_secretbox_KEYBYTES;
+    const NONCE_BYTES = sodium.crypto_secretbox_NONCEBYTES;
 
     // Generate server key pair
     let serverKeyPair = sodium.crypto_box_keypair();
@@ -14,28 +16,23 @@ var base32 = require('base32');
 
     // Generate Alice Secret Key
     let aliceSecretKey = sodium.randombytes_buf(32);
-    // let secretKey = base32.encode(rand).toUpperCase().replace(/=/g, '');
     console.log('Alice Secret Key: ' + Buffer.from(aliceSecretKey).toString('base64'));
 
-    // Generate Alice Private Key using the secret key as passphrase
+    // Generate Alice Private Key
     let aliceKeyPair = sodium.crypto_box_keypair();
-    console.log('Alice Private Key: ' + Buffer.from(aliceKeyPair.publicKey).toString('base64'));
+    console.log('Alice Public Key: ' + Buffer.from(aliceKeyPair.publicKey).toString('base64'));
+    console.log('Alice Private Key: ' + Buffer.from(aliceKeyPair.privateKey).toString('base64'));
 
-    // Encrypt Alice Private Key (with key derivation)
+    // Encrypt Alice Private Key (with key derivation from Alice Secret Key)
     let context = 'private key encryption';
-    let subKey = sodium.crypto_kdf_derive_from_key(
-        sodium.crypto_secretbox_KEYBYTES, 1, context, aliceSecretKey
-    );
-    let nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_NONCEBYTES, 2, context, aliceSecretKey));
+    let subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, aliceSecretKey);
+    let nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, aliceSecretKey));
     let aliceEncryptedPrivateKey = sodium.crypto_secretbox_easy(aliceKeyPair.privateKey, nonce, subKey);
     console.log('Alice Encrypted Private Key: '+ Buffer.from(aliceEncryptedPrivateKey).toString('base64'));
 
     // Decrypt Alice Private Key (for testing)
-    subKey = sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_KEYBYTES, 1, context, aliceSecretKey);
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_NONCEBYTES, 2, context, aliceSecretKey));
     let aliceDecryptedPrivateKey = sodium.crypto_secretbox_open_easy(aliceEncryptedPrivateKey, nonce, subKey);
     console.log('Alice Decrypted Private Key: ' + Buffer.from(aliceDecryptedPrivateKey).toString('base64'));
-    // KEYS ARE NOT EQUAL :/
 
     console.log('------------------------------------------------------------------------');
 
@@ -52,7 +49,7 @@ var base32 = require('base32');
     subKey = sodium.crypto_kdf_derive_from_key(
         sodium.crypto_secretbox_KEYBYTES, 1, context, aliceSecretKey
     );
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_NONCEBYTES, 2, context, bobSecretKey));
+    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, bobSecretKey));
     let bobEncryptedPrivateKey = sodium.crypto_secretbox_easy(bobKeyPair.privateKey, nonce, subKey);
     console.log('Bob Encrypted Private Key: '+ Buffer.from(bobEncryptedPrivateKey).toString('base64'));
 
@@ -70,7 +67,7 @@ var base32 = require('base32');
     console.log('Vault Key: ' + Buffer.from(vaultKey).toString('base64'));
 
     // Encrypt the vault key with Alice Public Key
-    nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
+    nonce = sodium.randombytes_buf(NONCE_BYTES);
     let aliceEncryptedVaultKey = sodium.crypto_box_easy(vaultKey, nonce, aliceKeyPair.publicKey, serverKeyPair.privateKey);
     console.log('Alice Encrypted Vault Key: ' + Buffer.from(aliceEncryptedVaultKey).toString('base64'));
 
@@ -79,7 +76,7 @@ var base32 = require('base32');
     console.log('Alice Decrypted Vault key: ' + Buffer.from(aliceDecryptedVaultKey).toString('base64'));
 
     // Encrypt the vault key with Bob Public Key
-    nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
+    nonce = sodium.randombytes_buf(NONCE_BYTES);
     let bobEncryptedVaultKey = sodium.crypto_box_easy(vaultKey, nonce, bobKeyPair.publicKey, serverKeyPair.privateKey);
     console.log('Bob Encrypted Vault Key: ' + Buffer.from(bobEncryptedVaultKey).toString('base64'));
 
@@ -107,8 +104,8 @@ var base32 = require('base32');
     // Encrypt the Vault Items with Alice Vault Key
     let encryptedItem = vault.items[0];
     context = 'vault data encryption';
-    subKey = sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_KEYBYTES, 1, context, aliceDecryptedVaultKey);
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_NONCEBYTES, 2, context, aliceDecryptedVaultKey));
+    subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, aliceDecryptedVaultKey);
+    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, aliceDecryptedVaultKey));
     let encryptedItemData = sodium.crypto_secretbox_easy(JSON.stringify(encryptedItem.data), nonce, subKey);
     console.log('Alice Encrypted Item data: ' + Buffer.from(encryptedItemData).toString('base64'));
 
@@ -116,8 +113,8 @@ var base32 = require('base32');
     // TODO
 
     // Decrypt the Vault Items with the Bob Vault Key
-    subKey = sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_KEYBYTES, 1, context, bobDecryptedVaultKey);
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(sodium.crypto_secretbox_NONCEBYTES, 2, context, bobDecryptedVaultKey));
+    subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, bobDecryptedVaultKey);
+    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, bobDecryptedVaultKey));
     let decryptedItem = sodium.crypto_secretbox_open_easy(encryptedItemData, nonce, subKey);
     console.log('Bob Decrypted Item data: ' + Buffer.from(decryptedItem).toString("ascii"));
 
