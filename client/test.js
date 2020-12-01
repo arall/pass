@@ -8,12 +8,6 @@ const _sodium = require('libsodium-wrappers');
     const KEY_BYTES = sodium.crypto_secretbox_KEYBYTES;
     const NONCE_BYTES = sodium.crypto_secretbox_NONCEBYTES;
 
-    // Generate server key pair
-    let serverKeyPair = sodium.crypto_box_keypair();
-    console.log('Server key: ' + Buffer.from(serverKeyPair.publicKey).toString('base64'));
-
-    console.log('------------------------------------------------------------------------');
-
     // Generate Alice Secret Key
     let aliceSecretKey = sodium.randombytes_buf(32);
     console.log('Alice Secret Key: ' + Buffer.from(aliceSecretKey).toString('base64'));
@@ -67,21 +61,19 @@ const _sodium = require('libsodium-wrappers');
     console.log('Vault Key: ' + Buffer.from(vaultKey).toString('base64'));
 
     // Encrypt the vault key with Alice Public Key
-    nonce = sodium.randombytes_buf(NONCE_BYTES);
-    let aliceEncryptedVaultKey = sodium.crypto_box_easy(vaultKey, nonce, aliceKeyPair.publicKey, serverKeyPair.privateKey);
+    let aliceEncryptedVaultKey = sodium.crypto_box_seal(vaultKey, aliceKeyPair.publicKey);
     console.log('Alice Encrypted Vault Key: ' + Buffer.from(aliceEncryptedVaultKey).toString('base64'));
 
     // Decrypt the Vault Key
-    let aliceDecryptedVaultKey = sodium.crypto_box_open_easy(aliceEncryptedVaultKey, nonce, serverKeyPair.publicKey, aliceKeyPair.privateKey);
+    let aliceDecryptedVaultKey = sodium.crypto_box_seal_open(aliceEncryptedVaultKey, aliceKeyPair.publicKey, aliceKeyPair.privateKey);
     console.log('Alice Decrypted Vault key: ' + Buffer.from(aliceDecryptedVaultKey).toString('base64'));
 
     // Encrypt the vault key with Bob Public Key
-    nonce = sodium.randombytes_buf(NONCE_BYTES);
-    let bobEncryptedVaultKey = sodium.crypto_box_easy(vaultKey, nonce, bobKeyPair.publicKey, serverKeyPair.privateKey);
+    let bobEncryptedVaultKey = sodium.crypto_box_seal(vaultKey, bobKeyPair.publicKey);
     console.log('Bob Encrypted Vault Key: ' + Buffer.from(bobEncryptedVaultKey).toString('base64'));
 
     // Decrypt the Vault Key with Bob
-    let bobDecryptedVaultKey = sodium.crypto_box_open_easy(bobEncryptedVaultKey, nonce, serverKeyPair.publicKey, bobKeyPair.privateKey);
+    let bobDecryptedVaultKey = sodium.crypto_box_seal_open(bobEncryptedVaultKey, bobKeyPair.publicKey, bobKeyPair.privateKey);
     console.log('Bob Decrypted Vault key: ' + Buffer.from(bobDecryptedVaultKey).toString('base64'));
 
     // Send the Vault and the Alice Encrypted Vault Key to the server

@@ -30,9 +30,7 @@
                 document.getElementById('secret-key').innerHTML = 'This is your secret key: ' + key;
 
                 // Generate key pair using the secret key as passphrase
-                var privkey, pubkey;
-                sodium.crypto_box_keypair(privkey, pubkey);
-                console.log(pubkey);
+
 
                 
                 // Upload the key pairs to the server
