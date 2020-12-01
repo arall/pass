@@ -10,6 +10,16 @@ class Key extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'public',
+        'private',
+    ];
+
+    /**
      * User relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

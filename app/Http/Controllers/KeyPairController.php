@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Key;
 use Illuminate\Http\Request;
 
 class KeyPairController extends Controller
@@ -24,6 +25,11 @@ class KeyPairController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO
+        auth()->user()->key()->create([
+            'public' => $request->input('public'),
+            'private' => $request->input('private'),
+        ]);
+
+        return response()->json(['success' => true], 200);
     }
 }

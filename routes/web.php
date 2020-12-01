@@ -24,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Secret key generation
     Route::get('generate-secret-key', [KeyPairController::class, 'show'])->name('keypair.generate');
-    Route::post('generate-secret-key', [KeyPairController::class, 'store']);
+    Route::post('generate-secret-key', [KeyPairController::class, 'store'])->name('keypair.save');
 
     Route::middleware(['key'])->group(function () {
         Route::get('/dashboard', function () {

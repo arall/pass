@@ -12,17 +12,19 @@ const _sodium = require('libsodium-wrappers');
     let aliceSecretKey = sodium.randombytes_buf(32);
     console.log('Alice Secret Key: ' + Buffer.from(aliceSecretKey).toString('base64'));
 
-    // Generate Alice Private Key
-    let aliceKeyPair = sodium.crypto_box_keypair();
+    // Generate Alice Key Pair
+    // let aliceKeyPair = sodium.crypto_box_keypair();
+
+
     console.log('Alice Public Key: ' + Buffer.from(aliceKeyPair.publicKey).toString('base64'));
     console.log('Alice Private Key: ' + Buffer.from(aliceKeyPair.privateKey).toString('base64'));
 
     // Encrypt Alice Private Key (with key derivation from Alice Secret Key)
     let context = 'private key encryption';
     let subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, aliceSecretKey);
-    let nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, aliceSecretKey));
+    let nonce = sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, aliceSecretKey);
     let aliceEncryptedPrivateKey = sodium.crypto_secretbox_easy(aliceKeyPair.privateKey, nonce, subKey);
-    console.log('Alice Encrypted Private Key: '+ Buffer.from(aliceEncryptedPrivateKey).toString('base64'));
+    console.log('Alice Encrypted Private Key: ' + Buffer.from(aliceEncryptedPrivateKey).toString('base64'));
 
     // Decrypt Alice Private Key (for testing)
     let aliceDecryptedPrivateKey = sodium.crypto_secretbox_open_easy(aliceEncryptedPrivateKey, nonce, subKey);
@@ -35,17 +37,15 @@ const _sodium = require('libsodium-wrappers');
     // let secretKey = base32.encode(rand).toUpperCase().replace(/=/g, '');
     console.log('Bob Secret Key: ' + Buffer.from(bobSecretKey).toString('base64'));
 
-    // Generate Bob Private Key using the secret key as passphrase
+    // Generate Bob Key Pair
     let bobKeyPair = sodium.crypto_box_keypair();
     console.log('Bob Private Key: ' + Buffer.from(bobKeyPair.publicKey).toString('base64'));
 
-    // Encrypt Bob Private Key (with key derivation)
-    subKey = sodium.crypto_kdf_derive_from_key(
-        sodium.crypto_secretbox_KEYBYTES, 1, context, aliceSecretKey
-    );
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, bobSecretKey));
+    // Encrypt Bob Private Key (with key derivation from Bob Secret Key)
+    subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, bobSecretKey);
+    nonce = sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, bobSecretKey);
     let bobEncryptedPrivateKey = sodium.crypto_secretbox_easy(bobKeyPair.privateKey, nonce, subKey);
-    console.log('Bob Encrypted Private Key: '+ Buffer.from(bobEncryptedPrivateKey).toString('base64'));
+    console.log('Bob Encrypted Private Key: ' + Buffer.from(bobEncryptedPrivateKey).toString('base64'));
 
     // Send the Encrypted Private Keys to the server
     // TODO
@@ -97,7 +97,7 @@ const _sodium = require('libsodium-wrappers');
     let encryptedItem = vault.items[0];
     context = 'vault data encryption';
     subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, aliceDecryptedVaultKey);
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, aliceDecryptedVaultKey));
+    nonce = sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, aliceDecryptedVaultKey);
     let encryptedItemData = sodium.crypto_secretbox_easy(JSON.stringify(encryptedItem.data), nonce, subKey);
     console.log('Alice Encrypted Item data: ' + Buffer.from(encryptedItemData).toString('base64'));
 
@@ -106,7 +106,7 @@ const _sodium = require('libsodium-wrappers');
 
     // Decrypt the Vault Items with the Bob Vault Key
     subKey = sodium.crypto_kdf_derive_from_key(KEY_BYTES, 1, context, bobDecryptedVaultKey);
-    nonce = Buffer.from(sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, bobDecryptedVaultKey));
+    nonce = sodium.crypto_kdf_derive_from_key(NONCE_BYTES, 2, context, bobDecryptedVaultKey);
     let decryptedItem = sodium.crypto_secretbox_open_easy(encryptedItemData, nonce, subKey);
     console.log('Bob Decrypted Item data: ' + Buffer.from(decryptedItem).toString("ascii"));
 
