@@ -13,9 +13,7 @@ const _sodium = require('libsodium-wrappers');
     console.log('Alice Secret Key: ' + Buffer.from(aliceSecretKey).toString('base64'));
 
     // Generate Alice Key Pair
-    // let aliceKeyPair = sodium.crypto_box_keypair();
-
-
+    let aliceKeyPair = sodium.crypto_box_keypair();
     console.log('Alice Public Key: ' + Buffer.from(aliceKeyPair.publicKey).toString('base64'));
     console.log('Alice Private Key: ' + Buffer.from(aliceKeyPair.privateKey).toString('base64'));
 
