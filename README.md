@@ -1,3 +1,5 @@
+A password manager for teams build with Laravel.
+
 ## Security
 All the encryption and key generation happens in the client side. The server will NOT store any vault keys, neither user secret keys.
 
