@@ -15,6 +15,7 @@ class Key extends Model
      * @var array
      */
     protected $fillable = [
+        'context',
         'public',
         'private',
     ];

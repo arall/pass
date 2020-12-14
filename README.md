@@ -1,3 +1,6 @@
+## User authentication
+https://laravel.com/docs/8.x/sanctum
+
 ## Security
 All the encryption and key generation happens in the client side. The server will NOT store any vault keys, neither user secret keys.
 

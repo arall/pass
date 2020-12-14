@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\KeyPairController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\VaultController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,12 +25,13 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth'])->group(function () {
 
     // Secret key generation
-    Route::get('generate-secret-key', [KeyPairController::class, 'show'])->name('keypair.generate');
-    Route::post('generate-secret-key', [KeyPairController::class, 'store'])->name('keypair.save');
+    Route::middleware(['key.empty'])->group(function () {
+        Route::get('generate-secret-key', [KeyPairController::class, 'index'])->name('keypair.generate');
+        Route::post('generate-secret-key', [KeyPairController::class, 'store'])->name('keypair.save');
+    });
 
     Route::middleware(['key'])->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('vaults', VaultController::class);
     });
 });

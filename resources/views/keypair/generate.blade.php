@@ -28,8 +28,8 @@
                 const NONCE_BYTES = sodium.crypto_secretbox_NONCEBYTES;
 
                 // User context (seed stored on the server)
-                let context = sodium.randombytes_buf(32);
-                console.log('Context: ' + btoa(encryptedPrivateKey));
+                let context = btoa(sodium.randombytes_buf(32));
+                console.log('Context: ' + btoa(context));
 
                 // Generate a random secret key
                 let secretKey = sodium.randombytes_buf(32);
@@ -48,18 +48,19 @@
                 let encryptedPrivateKey = sodium.crypto_secretbox_easy(keyPair.privateKey, nonce, subKey);
                 console.log('Encrypted Private Key: ' + btoa(encryptedPrivateKey));
 
-                while(encryptedPrivateKey == null) {
-                    console.log('waiting...');
-                }
-
                 // Send the Encrypted Private Key to the server
                 let data = {
+                    'context': context,
                     'public': btoa(keyPair.publicKey),
                     'private': btoa(encryptedPrivateKey)
                 };
                 axios.post('{{ route('keypair.save') }}', data).then(function(response){
                     console.log('Encrypted keypair stored in the server!');
                 });
+
+                // Local key storage
+                sessionStorage.key.private = btoa(encryptedPrivateKey);
+                sessionStorage.key.public = btoa(keyPair.publicKey);
             }
         };
     </script>

@@ -2,7 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1cc9642e-ded4-4b2c-a476-829b574c11a3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/client/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/DashboardController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Middleware/KeyPairEmpty.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pass.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pass.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.php_cs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.php_cs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/KeyPairController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/KeyPairController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Key.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Key.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_26_122257_create_keys_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_26_122257_create_keys_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/keypair/generate.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/keypair/generate.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/navigation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/navigation.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/auth.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,9 +144,13 @@
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
       <path value="$PROJECT_DIR$/vendor/laravel/breeze" />
+      <path value="$PROJECT_DIR$/vendor/laravel/sanctum" />
     </include_path>
   </component>
   <component name="ProjectId" id="1kpRn6jQVrKpHGmxF8jBfJJTGSh" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -137,6 +158,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views/vaults" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -144,6 +166,10 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/views/vaults" />
+      <recent name="$PROJECT_DIR$/app/Http/Middleware" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/resources/views/keypair" />
     </key>
@@ -166,7 +192,13 @@
       <workItem from="1606465985616" duration="5410000" />
       <workItem from="1606478175413" duration="8612000" />
       <workItem from="1606733958990" duration="1866000" />
-      <workItem from="1606811692735" duration="4385000" />
+      <workItem from="1606811692735" duration="4931000" />
+      <workItem from="1606823637870" duration="2208000" />
+      <workItem from="1606902272572" duration="341000" />
+      <workItem from="1606983293946" duration="7000" />
+      <workItem from="1607077486003" duration="344000" />
+      <workItem from="1607342150169" duration="6000" />
+      <workItem from="1607940152166" duration="1867000" />
     </task>
     <servers />
   </component>
@@ -190,13 +222,15 @@
       <screen x="0" y="23" width="2560" height="1317" />
     </state>
     <state x="1393" y="343" key="#PHP_CodeSniffer/0.23.2560.1317@0.23.2560.1317" timestamp="1606397986955" />
-    <state x="1592" y="238" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1606399155919">
+    <state x="1592" y="238" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1606829899647">
       <screen x="0" y="23" width="2560" height="1317" />
     </state>
+    <state x="1592" y="238" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1680.279.1680.1027/0.23.2560.1317@0.23.2560.1317" timestamp="1606829899647" />
     <state x="1592" y="238" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.2560.1317@0.23.2560.1317" timestamp="1606399155919" />
-    <state x="1543" y="443" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606398174704">
+    <state x="1543" y="443" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606829676294">
       <screen x="0" y="23" width="2560" height="1317" />
     </state>
+    <state x="1543" y="443" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1680.279.1680.1027/0.23.2560.1317@0.23.2560.1317" timestamp="1606829676294" />
     <state x="1543" y="443" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.23.2560.1317@0.23.2560.1317" timestamp="1606398174704" />
     <state x="1629" y="608" key="NewPhpFileDialog" timestamp="1606398493971">
       <screen x="0" y="23" width="2560" height="1317" />
