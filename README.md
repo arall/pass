@@ -1,7 +1,9 @@
 A password manager for teams build with Laravel.
 
-## User authentication
+## Backend
+
 https://laravel.com/docs/8.x/sanctum#spa-authentication
+https://laracasts.com/series/whats-new-in-laravel-7/episodes/6
 
 ## Security
 All the encryption and key generation happens in the client side. The server will NOT store any vault keys, neither user secret keys.
