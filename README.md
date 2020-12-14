@@ -1,3 +1,5 @@
+A password manager for teams build with Laravel.
+
 ## User authentication
 https://laravel.com/docs/8.x/sanctum
 
