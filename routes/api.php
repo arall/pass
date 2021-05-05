@@ -1,10 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\KeysController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 /*
@@ -18,28 +17,17 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('guest')->group(function () {
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'login']);
 });
 
-Route::post('/register', [RegisteredUserController::class, 'store'])->middleware(['guest']);
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'device_name' => 'required',
-    ]);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 
-    $user = User::where('email', $request->email)->first();
-
-    if (!$user || !Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect.'],
-        ]);
-    }
-
-    return [
-        'token' => $user->createToken($request->device_name)->plainTextToken,
-    ];
+    Route::get('/keys', [KeysController::class, 'index']);
+    Route::post('/keys', [KeysController::class, 'store']);
 });
